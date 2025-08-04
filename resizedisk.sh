@@ -2,7 +2,7 @@
 
 source ./utils/colors.sh
 
-blue "Proxmox VM Disk Resize Helper"
+white "Proxmox VM Disk Resize Helper"
 
 # Check for required tools
 blue "Checking for required tools..."
