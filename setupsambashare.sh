@@ -4,24 +4,25 @@ source ./utils/colors.sh
 
 white "Samba Network Share Setup Wizard"
 
-# 1. Update & install samba
+# 1. Update & install samba (less verbose)
 info "Updating system and installing samba..."
-sudo apt update && sudo apt install -y samba
+sudo apt update -qq &>/dev/null
+sudo apt install -y samba &>/dev/null
 
 # 2. Ask for username
-read -rp "$(echo -e ${BLUE} Enter a username for Samba (no spaces): )" SMB_USER
+read -rp "$(echo -e ${BLUE} Enter a username for Samba (no spaces): ${RESET})" SMB_USER
 
 # 3. Create Linux user (no login, no home)
 info "Creating Linux user '$SMB_USER' (no login, no home)..."
-sudo adduser --no-create-home --disabled-login --shell /usr/sbin/nologin "$SMB_USER"
+sudo adduser --no-create-home --disabled-login --shell /usr/sbin/nologin "$SMB_USER" &>/dev/null
 
 # 4. Set samba password
 info "Set a password for the Samba user '$SMB_USER':"
 sudo smbpasswd -a "$SMB_USER"
 
 # 5. Ask for share name and path
-read -rp "$(echo -e ${BLUE} Enter a name for the Samba share: " SHARE_NAME
-read -rp "$(echo -e ${BLUE} Enter the full path to the directory to share (will be created if missing): )" SHARE_PATH
+read -rp "$(echo -e ${BLUE} Enter a name for the Samba share: ${RESET})" SHARE_NAME
+read -rp "$(echo -e ${BLUE} Enter the full path to the directory to share (will be created if missing): ${RESET})" SHARE_PATH
 
 # 6. Create directory if missing
 if [ ! -d "$SHARE_PATH" ]; then
@@ -68,4 +69,4 @@ fi
 IP=$(hostname -I | awk '{print $1}')
 check "Samba share '$SHARE_NAME' is ready!"
 info "To connect from Windows: \\\\$IP\\$SHARE_NAME"
-info "To connect from Linux: see 'Mount Samba Drive To Linux' guide."
+info "To connect from Linux: see 'Mount Samba Drive

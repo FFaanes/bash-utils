@@ -4,30 +4,31 @@ source ./utils/colors.sh
 
 white "Docker & Portainer Installer"
 
-# Update & Upgrade
+# Update & Upgrade (less verbose)
 info "Updating system packages..."
-sudo apt update && sudo apt upgrade -y
+sudo apt update -qq &>/dev/null
+sudo apt upgrade -y &>/dev/null
 
-# Install dependencies
+# Install dependencies (less verbose)
 info "Installing dependencies..."
-sudo apt install -y ca-certificates curl gnupg lsb-release
+sudo apt install -y ca-certificates curl gnupg lsb-release &>/dev/null
 
-# Add Docker GPG key
+# Add Docker GPG key (less verbose)
 info "Adding Docker GPG key..."
-sudo install -m 0755 -d /etc/apt/keyrings
+sudo install -m 0755 -d /etc/apt/keyrings &>/dev/null
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg &>/dev/null
 
-# Add Docker repository
+# Add Docker repository (less verbose)
 info "Adding Docker repository..."
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# Install Docker & Compose plugin
+# Install Docker & Compose plugin (less verbose)
 info "Installing Docker Engine and Compose plugin..."
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt update -qq &>/dev/null
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &>/dev/null
 
 # Verify Docker install
 if docker --version &>/dev/null && docker compose version &>/dev/null; then
@@ -43,7 +44,7 @@ INSTALL_PORTAINER=${INSTALL_PORTAINER,,} # to lowercase
 
 if [[ "$INSTALL_PORTAINER" == "y" || "$INSTALL_PORTAINER" == "yes" ]]; then
     info "Creating Portainer volume..."
-    docker volume create portainer_data
+    docker volume create portainer_data &>/dev/null
 
     info "Running Portainer container..."
     docker run -d \
@@ -52,7 +53,7 @@ if [[ "$INSTALL_PORTAINER" == "y" || "$INSTALL_PORTAINER" == "yes" ]]; then
       --restart=always \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v portainer_data:/data \
-      portainer/portainer-ce:latest
+      portainer/portainer-ce:latest &>/dev/null
 
     # Wait a few seconds for container to start
     sleep 5
@@ -65,6 +66,3 @@ if [[ "$INSTALL_PORTAINER" == "y" || "$INSTALL_PORTAINER" == "yes" ]]; then
     fi
 else
     warn "Portainer installation skipped."
-fi
-
-check
