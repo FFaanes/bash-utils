@@ -66,3 +66,6 @@ if [[ "$INSTALL_PORTAINER" == "y" || "$INSTALL_PORTAINER" == "yes" ]]; then
     fi
 else
     warn "Portainer installation skipped."
+fi
+
+check "Docker installation complete!"

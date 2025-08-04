@@ -10,7 +10,8 @@ sudo apt update -qq &>/dev/null
 sudo apt install -y samba &>/dev/null
 
 # 2. Ask for username
-read -rp "$(echo -e ${BLUE} Enter a username for Samba (no spaces): ${RESET})" SMB_USER
+echo -ne "${BLUE} Enter a username for Samba (no spaces): ${RESET}"
+read -r SMB_USER
 
 # 3. Create Linux user (no login, no home)
 info "Creating Linux user '$SMB_USER' (no login, no home)..."
@@ -21,8 +22,10 @@ info "Set a password for the Samba user '$SMB_USER':"
 sudo smbpasswd -a "$SMB_USER"
 
 # 5. Ask for share name and path
-read -rp "$(echo -e ${BLUE} Enter a name for the Samba share: ${RESET})" SHARE_NAME
-read -rp "$(echo -e ${BLUE} Enter the full path to the directory to share (will be created if missing): ${RESET})" SHARE_PATH
+echo -ne "${BLUE} Enter a name for the Samba share: ${RESET}"
+read -r SHARE_NAME
+echo -ne "${BLUE} Enter the full path to the directory to share (will be created if missing): ${RESET}"
+read -r SHARE_PATH
 
 # 6. Create directory if missing
 if [ ! -d "$SHARE_PATH" ]; then
