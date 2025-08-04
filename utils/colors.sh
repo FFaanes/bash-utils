@@ -21,16 +21,41 @@ warn()  { printf "${WARN} ${YELLOW}%s${RESET}\n" "$1"; }
 info()  { printf "${INFO} ${CYAN}%s${RESET}\n" "$1"; }
 error() { printf "${ERROR}${RED}%s${RESET}\n" "$1"; }
 
-# Color-only functions
-green()  { printf "${GREEN}%s${RESET}\n" "$1"; }
-yellow() { printf "${YELLOW}%s${RESET}\n" "$1"; }
-red()    { printf "${RED}%s${RESET}\n" "$1"; }
-blue()   { printf "${BLUE}%s${RESET}\n" "$1"; }
-cyan()   { printf "${CYAN}%s${RESET}\n" "$1"; }
-white()  { printf "${WHITE}%s${RESET}\n" "$1"; }
+
+# Color-only functions with optional newline
+green()  { local nl="${2:-\n}"; printf "${GREEN}%s${RESET}${nl}" "$1"; }
+yellow() { local nl="${2:-\n}"; printf "${YELLOW}%s${RESET}${nl}" "$1"; }
+red()    { local nl="${2:-\n}"; printf "${RED}%s${RESET}${nl}" "$1"; }
+blue()   { local nl="${2:-\n}"; printf "${BLUE}%s${RESET}${nl}" "$1"; }
+cyan()   { local nl="${2:-\n}"; printf "${CYAN}%s${RESET}${nl}" "$1"; }
+white()  { local nl="${2:-\n}"; printf "${WHITE}%s${RESET}${nl}" "$1"; }
+
+# Usage:
+# green "Hello"         # prints with newline (default)
+# green "Hello" ""      # prints without newline (for spinner)
+# green "Hello" "\r"    # prints with carriage return (for spinner)
+# ...existing code...
+
+
+help=false
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      help=true
+      shift
+      ;;
+    *)
+      echo "Unknown option: -h --help"
+      exit 1
+      ;;
+  esac
+done
+
 
 # Help
-if [[ $1 == "--help" ]]; then
+if [ "$help" = true ]; then
   white "---------------------------"
   info "Available Functions"
   white "---------------------------"
