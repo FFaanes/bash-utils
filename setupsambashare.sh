@@ -72,4 +72,3 @@ fi
 IP=$(hostname -I | awk '{print $1}')
 check "Samba share '$SHARE_NAME' is ready!"
 info "To connect from Windows: \\\\$IP\\$SHARE_NAME"
-info "To connect from Linux: see 'Mount Samba Drive
